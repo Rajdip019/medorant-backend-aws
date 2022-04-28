@@ -1,0 +1,10 @@
+{
+  "httpMethod": "GET",
+  "path": "/medBuyLink",
+  "queryStringParameters": {
+    "medName" : "rantac"
+  },
+  "headers": {
+    "Content-Type": "application/json"
+  }
+}

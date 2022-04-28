@@ -1,0 +1,31 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-medorantmain-dev-200010-authRole",
+      "UnauthRoleArn": "arn:aws:iam::814090889453:role/amplify-medorantmain-dev-200010-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::814090889453:role/amplify-medorantmain-dev-200010-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-medorantmain-dev-200010-deployment",
+      "UnauthRoleName": "amplify-medorantmain-dev-200010-unauthRole",
+      "StackName": "amplify-medorantmain-dev-200010",
+      "StackId": "arn:aws:cloudformation:ap-south-1:814090889453:stack/amplify-medorantmain-dev-200010/b6de12d0-c6ff-11ec-a108-0a2a1af5cbc2",
+      "AmplifyAppId": "drtszmukeyz1u"
+    },
+    "categories": {
+      "function": {
+        "MedorantMedData": {
+          "deploymentBucketName": "amplify-medorantmain-dev-200010-deployment",
+          "s3Key": "amplify-builds/MedorantMedData-567341576b613234586e-build.zip"
+        },
+        "MedLink": {
+          "deploymentBucketName": "amplify-medorantmain-dev-200010-deployment",
+          "s3Key": "amplify-builds/MedLink-62684d506c4256555654-build.zip"
+        },
+        "user": {
+          "deploymentBucketName": "amplify-medorantmain-dev-200010-deployment",
+          "s3Key": "amplify-builds/user-6c6e766b70694a716234-build.zip"
+        }
+      }
+    }
+  }
+}

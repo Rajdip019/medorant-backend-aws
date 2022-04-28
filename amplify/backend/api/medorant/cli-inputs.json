@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "paths": {
+    "/med": {
+      "name": "/med",
+      "lambdaFunction": "MedorantMedData",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/link": {
+      "name": "/link",
+      "lambdaFunction": "MedLink",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/user": {
+      "name": "/user",
+      "lambdaFunction": "user",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
