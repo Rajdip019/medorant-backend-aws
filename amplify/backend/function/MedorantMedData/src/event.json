@@ -1,8 +1,8 @@
 {
   "httpMethod": "GET",
-  "path": "/med/Aztolet%20%2010%20Tablet",
+  "path": "/med/Banocide%20Forte%20Tablet",
   "queryStringParameters": {
-    "limit": "10"
+    "user_id": "1234"
   },
   "headers": {
     "Content-Type": "application/json"

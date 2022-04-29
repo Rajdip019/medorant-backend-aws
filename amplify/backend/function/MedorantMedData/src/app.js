@@ -46,11 +46,35 @@ const convertUrlType = (param, type) => {
   }
 }
 
+//Get Best Buy Link Scrapper
+
 const getBestBuyLink = async (medicine_name) => {
   const res = await fetch(`https://8g34ra4qq2.execute-api.ap-south-1.amazonaws.com/dev/link?medName=${medicine_name}`);
   const link = await res.json()
   return link
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+}
+
+//Fetch user Data
+const getUserData = async(user_id) => {
+  const res = await fetch(`https://8g34ra4qq2.execute-api.ap-south-1.amazonaws.com/dev/user/${user_id}`);
+  const user_data =  await res.json();
+  return user_data
+}
+
+//Checking if two array is equal or not
+
+function checkCounterfeit(user_diseases, side_effects) {
+  let matches = [];  // Array to contain match elements
+  for(let i=0 ; i<user_diseases.length ; ++i) {
+    for(let j=0 ; j<side_effects.length ; ++j) {
+      if(user_diseases[i] == side_effects[j]) {    // If element is in both the arrays
+        matches.push(user_diseases[i]);        // Push to arr array
+      }
+    }
+  }
+   
+  return matches;  // Return the arr elements
+}
 
 /********************************
  * HTTP Get method for list objects *
@@ -84,17 +108,82 @@ app.get(path + hashKeyPath, function(req, res) {
       res.json({error: 'Could not load items: ' + err});
     } else {
 
+      //Filtering the unorganized data
       const buy_link = await getBestBuyLink(data.Items[0].medicine_name)
-
+      
       const alternative_medicines_array = data.Items[0].alternative_medicines.split(",");
       alternative_medicines_array.pop();
-
+      
       const side_effects_array = data.Items[0].side_effects.split(",");
       side_effects_array.pop();
-
+      
       const uses_array = data.Items[0].uses.split(",");
       uses_array.pop();
+      
+      // CounterFeit Variables
+      let counterFeit = null;
+      let  overallSeverity = null;
+      let highSeverity = null;
+      let lowSeverity = null;
+      let mediumSeverity = null;
+      let checkSeverityHigh = null;
+      let checkSeverityMedium = null;
+      let checkSeverityLow = null
+      
+      //Running Functions to get the user data
+      const user_id = req.query.user_id;
+      const user_data = await getUserData(user_id);
+      const user_diseses = user_data[0].disease;
 
+      // Diseses data
+      const  high = ["Diabetes", "Thyroid", "Coeliac", "Tuberculosis",  "Diarrhea", "Aids", "Piles", "Sugar","Constipation"];
+      const medium = ["Fever", "Abdominal pain", "Acne", "Stomach pain", "Infection"];
+      const  low =  ["Vomiting", "Nausea", "Cough", "Headache" , "Erythema", "Rash" , "hives", "Skin peeling"]
+
+
+      //Checking of counterFeit and Severity
+      let  matches_result = checkCounterfeit(user_diseses, side_effects_array);
+      if(matches_result.length == 0 ){
+          counterFeit = true;
+          matches_result = null;
+      }else{
+        counterFeit = false;
+        checkSeverityLow = checkCounterfeit(low, matches_result)
+        if(checkSeverityLow.length !== 0){
+          lowSeverity = checkSeverityLow.length;
+          overallSeverity = "low"
+        }
+        checkSeverityMedium = checkCounterfeit(medium, matches_result)
+        if(checkSeverityMedium.length !== 0){
+          mediumSeverity = checkSeverityMedium.length;
+          overallSeverity = "medium"
+        }
+        checkSeverityHigh = checkCounterfeit(high, matches_result)
+        if(checkSeverityHigh.length !== 0){
+          highSeverity = checkSeverityHigh.length;
+          overallSeverity = "high"
+        }
+      }
+
+
+      //Severity Sata Schema
+      const severity = {
+        "overallSeverity" : overallSeverity,
+        "highSeverity" : {
+          "count" : highSeverity,
+          "names" : checkSeverityHigh
+        },
+        "mediumSeverity" : {
+          "count" :  mediumSeverity,
+          "names" : checkSeverityMedium
+        },
+        "lowSeverity" : {
+          "count" : lowSeverity,
+          "names" : checkSeverityLow
+        }
+      }
+
+      //FInal Filtered Data
       const filtered_data = {
         "medicine_name" : data.Items[0].medicine_name,
         "mrp": data.Items[0].mrp,
@@ -110,7 +199,10 @@ app.get(path + hashKeyPath, function(req, res) {
         "therapeutic_class": data.Items[0].therapeutic_class,
         "side_effects": side_effects_array,
         "habit_forming": data.Items[0].habit_forming,
-        "action_class": data.Items[0].action_class
+        "action_class": data.Items[0].action_class,
+        "counterFeit" : counterFeit,
+        "Problems" : matches_result,
+        "severity" : severity
       }
       res.json(filtered_data);
     }

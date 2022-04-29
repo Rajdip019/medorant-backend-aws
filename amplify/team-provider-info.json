@@ -15,7 +15,7 @@
       "function": {
         "MedorantMedData": {
           "deploymentBucketName": "amplify-medorantmain-dev-200010-deployment",
-          "s3Key": "amplify-builds/MedorantMedData-567341576b613234586e-build.zip"
+          "s3Key": "amplify-builds/MedorantMedData-386e4139467444436e6c-build.zip"
         },
         "MedLink": {
           "deploymentBucketName": "amplify-medorantmain-dev-200010-deployment",
